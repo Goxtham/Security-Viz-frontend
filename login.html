@@ -410,23 +410,141 @@
         </div>
     </div>
 
-    <!-- OTP Container -->
-    <div class="container" id="otpContainer">
-        <div class="card-front">
-            <div class="center-wrap">
-                <div class="section text-center">
-                    <h4 class="mb-4 pb-3">Verify Email</h4>
-                    <p>Please enter the OTP sent to your email.</p>
-                    <form id="otpForm">
-                        <div class="form-group">
-                            <input type="text" id="otp" name="otp" class="form-style" placeholder="Enter OTP" autocomplete="off" required>
-                            <i class="input-icon uil uil-key-skeleton"></i>
+    <!-- OTP Container - Fixed size to match login/register card -->
+    <div class="section" id="otpSection" style="display: none;">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="card-3d-wrap mx-auto" style="height: 400px;">
+                        <div class="card-front">
+                            <div class="center-wrap">
+                                <div class="section text-center">
+                                    <h4 class="mb-4 pb-3">Verify Email</h4>
+                                    <p>Please enter the OTP sent to your email.</p>
+                                    <form id="otpForm">
+                                        <div class="form-group">
+                                            <input type="text" id="otp" name="otp" class="form-style" placeholder="Enter OTP" autocomplete="off" required>
+                                            <i class="input-icon uil uil-key-skeleton"></i>
+                                        </div>
+                                        <button type="submit" class="btn mt-4">Verify OTP</button>
+                                        <div id="otpError" class="error mt-3"></div>
+                                    </form>
+                                    <div class="mt-4">
+                                        <button id="resendOtp" class="link" style="background:none; border:none; color:#01E9F8;">Resend OTP</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn mt-4">Verify OTP</button>
-                        <div id="otpError" class="error mt-3"></div>
-                    </form>
-                    <div class="mt-4">
-                        <button id="resendOtp" class="link" style="background:none; border:none; color:#01E9F8;">Resend OTP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Section -->
+    <div class="section" id="forgotPasswordSection" style="display: none;">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="card-3d-wrap mx-auto" style="height: 400px;">
+                        <div class="card-front">
+                            <div class="center-wrap">
+                                <div class="section text-center">
+                                    <h4 class="mb-4 pb-3">Reset Password</h4>
+                                    <p>Enter your email to receive a verification code.</p>
+                                    <form id="forgotPasswordForm">
+                                        <div class="form-group">
+                                            <input type="email" id="resetEmail" name="email" class="form-style" placeholder="Your Email" autocomplete="off" required>
+                                            <i class="input-icon uil uil-at"></i>
+                                        </div>
+                                        <button type="submit" class="btn mt-4">Send Reset Code</button>
+                                        <div id="resetEmailError" class="error mt-3"></div>
+                                    </form>
+                                    <div class="mt-4">
+                                        <button id="backToLogin" class="link" style="background:none; border:none; color:#01E9F8;">Back to Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset OTP Verification Section -->
+    <div class="section" id="resetOtpSection" style="display: none;">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="card-3d-wrap mx-auto" style="height: 400px;">
+                        <div class="card-front">
+                            <div class="center-wrap">
+                                <div class="section text-center">
+                                    <h4 class="mb-4 pb-3">Verify Code</h4>
+                                    <p>Please enter the verification code sent to your email.</p>
+                                    <form id="resetOtpForm">
+                                        <div class="form-group">
+                                            <input type="text" id="resetOtp" name="otp" class="form-style" placeholder="Enter Code" autocomplete="off" required>
+                                            <i class="input-icon uil uil-key-skeleton"></i>
+                                        </div>
+                                        <button type="submit" class="btn mt-4">Verify Code</button>
+                                        <div id="resetOtpError" class="error mt-3"></div>
+                                    </form>
+                                    <div class="mt-4">
+                                        <button id="resendResetOtp" class="link" style="background:none; border:none; color:#01E9F8;">Resend Code</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Password Section -->
+    <div class="section" id="newPasswordSection" style="display: none;">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="card-3d-wrap mx-auto" style="height: 450px;">
+                        <div class="card-front">
+                            <div class="center-wrap">
+                                <div class="section text-center">
+                                    <h4 class="mb-4 pb-3">New Password</h4>
+                                    <p>Please enter your new password.</p>
+                                    <form id="newPasswordForm">
+                                        <div class="form-group">
+                                            <input type="password" id="newPassword" name="password" class="form-style" placeholder="New Password" autocomplete="off" required>
+                                            <i class="input-icon uil uil-lock-alt"></i>
+                                            <i id="toggleNewPassword" class="fas fa-eye-slash password-toggle-icon"></i>
+                                            <div class="password-strength">
+                                                <div class="strength-bar" id="newPasswordStrengthBar"></div>
+                                            </div>
+                                            <div class="strength-text" id="newPasswordStrengthText">
+                                                Password strength: <span>Weak</span>
+                                            </div>
+                                            <div class="password-requirements">
+                                                <ul>
+                                                    <li id="newPasswordLength">At least 8 characters</li>
+                                                    <li id="newPasswordNumber">Contains a number</li>
+                                                    <li id="newPasswordSpecial">Contains a special character</li>
+                                                    <li id="newPasswordUppercase">Contains an uppercase letter</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" id="confirmNewPassword" name="confirmPassword" class="form-style" placeholder="Confirm New Password" autocomplete="off" required>
+                                            <i class="input-icon uil uil-lock-alt"></i>
+                                            <i id="toggleConfirmNewPassword" class="fas fa-eye-slash password-toggle-icon"></i>
+                                        </div>
+                                        <button type="submit" class="btn mt-4">Reset Password</button>
+                                        <div id="newPasswordError" class="error mt-3"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -436,6 +554,8 @@
     <script>
         const API_URL = 'https://security-viz-api.onrender.com';
         let currentEmail = '';
+        let resetEmail = '';
+        let resetOtpToken = '';
 
         // Function to get cookie value by name
         function getCookie(name) {
@@ -528,8 +648,8 @@
 
                 if (response.ok) {
                     currentEmail = email;
-                    document.querySelector('.card-3d-wrap').style.display = 'none';
-                    document.getElementById('otpContainer').style.display = 'block';
+                    document.querySelector('.section:not(#otpSection)').style.display = 'none';
+                    document.getElementById('otpSection').style.display = 'block';
                     errorDiv.textContent = '';
                 } else {
                     errorDiv.textContent = data.error || 'Registration failed';
@@ -557,8 +677,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('otpContainer').style.display = 'none';
-                    document.querySelector('.card-3d-wrap').style.display = 'block';
+                    document.getElementById('otpSection').style.display = 'none';
+                    document.querySelector('.section:not(#otpSection)').style.display = 'block';
                     document.getElementById('reg-log').checked = false;
                     errorDiv.textContent = '';
                     alert('Email verified successfully! Please login.');
@@ -670,6 +790,226 @@
         // Password visibility toggle for confirm password
         document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('confirmPassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            }
+        });
+
+        // Link the "Forgot your password?" to the forgot password section
+        document.querySelector('.link').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.section:not(#forgotPasswordSection)').style.display = 'none';
+            document.getElementById('forgotPasswordSection').style.display = 'block';
+        });
+
+        // Back to login button
+        document.getElementById('backToLogin').addEventListener('click', function() {
+            document.getElementById('forgotPasswordSection').style.display = 'none';
+            document.querySelector('.section:not(#forgotPasswordSection):not(#resetOtpSection):not(#newPasswordSection):not(#otpSection)').style.display = 'block';
+        });
+
+        // Forgot password form submission
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resetEmail = document.getElementById('resetEmail').value;
+            const errorDiv = document.getElementById('resetEmailError');
+            
+            try {
+                const response = await fetch(`${API_URL}/reset-password-request`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: resetEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('forgotPasswordSection').style.display = 'none';
+                    document.getElementById('resetOtpSection').style.display = 'block';
+                    errorDiv.textContent = '';
+                } else {
+                    errorDiv.textContent = data.error || 'Failed to send reset code';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+
+        // Reset OTP verification
+        document.getElementById('resetOtpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('resetOtp').value;
+            const errorDiv = document.getElementById('resetOtpError');
+
+            try {
+                const response = await fetch(`${API_URL}/verify-reset-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: resetEmail, otp })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resetOtpToken = data.reset_token;
+                    document.getElementById('resetOtpSection').style.display = 'none';
+                    document.getElementById('newPasswordSection').style.display = 'block';
+                    errorDiv.textContent = '';
+                } else {
+                    errorDiv.textContent = data.error || 'Invalid verification code';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+
+        // Resend password reset OTP
+        document.getElementById('resendResetOtp').addEventListener('click', async () => {
+            const errorDiv = document.getElementById('resetOtpError');
+            
+            try {
+                const response = await fetch(`${API_URL}/reset-password-request`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: resetEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    errorDiv.textContent = '';
+                    alert('New verification code sent successfully!');
+                } else {
+                    errorDiv.textContent = data.error || 'Failed to resend code';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+
+        // Check password strength for new password
+        function checkNewPasswordStrength(password) {
+            let strength = 0;
+            const requirements = {
+                newPasswordLength: password.length >= 8,
+                newPasswordNumber: /\d/.test(password),
+                newPasswordSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+                newPasswordUppercase: /[A-Z]/.test(password)
+            };
+
+            // Update requirement indicators
+            Object.keys(requirements).forEach(req => {
+                const element = document.getElementById(req);
+                if (requirements[req]) {
+                    element.classList.remove('invalid');
+                    element.classList.add('valid');
+                    strength++;
+                } else {
+                    element.classList.remove('valid');
+                    element.classList.add('invalid');
+                }
+            });
+
+            // Update strength bar and text
+            const strengthBar = document.getElementById('newPasswordStrengthBar');
+            const strengthText = document.getElementById('newPasswordStrengthText').querySelector('span');
+            const strengthPercentage = (strength / 4) * 100;
+
+            strengthBar.style.width = `${strengthPercentage}%`;
+            strengthBar.style.backgroundColor = 
+                strengthPercentage < 25 ? '#ff4444' :
+                strengthPercentage < 50 ? '#ffbb33' :
+                strengthPercentage < 75 ? '#00C851' :
+                '#007E33';
+
+            strengthText.textContent = 
+                strengthPercentage < 25 ? 'Weak' :
+                strengthPercentage < 50 ? 'Medium' :
+                strengthPercentage < 75 ? 'Strong' :
+                'Very Strong';
+
+            return strength === 4;
+        }
+
+        // Password strength monitoring for new password
+        document.getElementById('newPassword').addEventListener('input', function() {
+            checkNewPasswordStrength(this.value);
+        });
+
+        // New password submission
+        document.getElementById('newPasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            const errorDiv = document.getElementById('newPasswordError');
+
+            if (newPassword !== confirmNewPassword) {
+                errorDiv.textContent = "Passwords do not match";
+                return;
+            }
+
+            if (!checkNewPasswordStrength(newPassword)) {
+                errorDiv.textContent = "Password does not meet security requirements";
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/reset-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email: resetEmail, 
+                        reset_token: resetOtpToken,
+                        new_password: newPassword 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('newPasswordSection').style.display = 'none';
+                    document.querySelector('.section:not(#forgotPasswordSection):not(#resetOtpSection):not(#newPasswordSection):not(#otpSection)').style.display = 'block';
+                    document.getElementById('reg-log').checked = false;
+                    alert('Password reset successful! Please log in with your new password.');
+                } else {
+                    errorDiv.textContent = data.error || 'Failed to reset password';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+
+        // Password visibility toggle for new password
+        document.getElementById('toggleNewPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('newPassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            }
+        });
+
+        // Password visibility toggle for confirm new password
+        document.getElementById('toggleConfirmNewPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('confirmNewPassword');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 this.classList.remove('fa-eye-slash');
