@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Security Visualization Tool</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -661,6 +661,7 @@
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
     }
 
     // Function to check login status
@@ -671,7 +672,7 @@
       if (!sessionId) {
         userInfo.innerHTML = `
           <a href="login.html">
-            <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
           </a>
         `;
         return;
@@ -689,15 +690,15 @@
       .then(data => {
         if (data.authenticated) {
           userInfo.innerHTML = `
-            <span class="welcome-text">Welcome, ${data.username}</span>
-            <button class="sign-in-btn" onclick="logout()" title="Sign out">Logout</button>
+            <span class="welcome-text" style="color: #01E9F8; font-size: 1.1rem; margin-right: 1rem;">Welcome, ${data.username}</span>
+            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="logout()" title="Sign out">Logout</button>
           `;
         } else {
           // If session is invalid, remove the cookie
           document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
           userInfo.innerHTML = `
             <a href="login.html">
-              <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+              <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
             </a>
           `;
         }
@@ -707,7 +708,7 @@
         document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
         userInfo.innerHTML = `
           <a href="login.html">
-            <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
           </a>
         `;
       });
@@ -779,6 +780,11 @@
           }, 300);
         }, {passive: true});
       });
+    });
+
+    // Most importantly, make sure this is called when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      checkLoginStatus();
     });
   </script>
 
