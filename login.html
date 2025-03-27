@@ -202,7 +202,10 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" required>
+                    <i id="togglePassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
+                </div>
             </div>
             <button type="submit">Login</button>
             <div id="loginError" class="error"></div>
@@ -226,7 +229,10 @@
             </div>
             <div class="form-group">
                 <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" name="password" required>
+                <div style="position: relative;">
+                    <input type="password" id="registerPassword" name="password" required>
+                    <i id="toggleRegisterPassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
+                </div>
                 <div class="password-strength">
                     <div class="strength-bar" id="strengthBar"></div>
                 </div>
@@ -242,7 +248,10 @@
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div style="position: relative;">
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <i id="toggleConfirmPassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
+                </div>
             </div>
             <button type="submit">Register</button>
             <div id="registerError" class="error"></div>
@@ -484,6 +493,48 @@
             } catch (error) {
                 console.error('Login error:', error);
                 errorDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+
+        // Password visibility toggle for login
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            }
+        });
+        
+        // Password visibility toggle for register
+        document.getElementById('toggleRegisterPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('registerPassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            }
+        });
+        
+        // Password visibility toggle for confirm password
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('confirmPassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
             }
         });
     </script>
