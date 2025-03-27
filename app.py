@@ -442,5 +442,137 @@ def get_user_score():
         print(f"[ERROR] Fetching user score failed: {str(e)}")
         return jsonify({"error": "Failed to fetch user score"}), 500
 
+@app.route("/reset-password-request", methods=["POST"])
+def reset_password_request():
+    try:
+        data = request.json
+        email = data.get("email")
+
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+
+        user = users_collection.find_one({"email": email})
+        if not user:
+            return jsonify({"error": "User with this email does not exist"}), 404
+
+        # Generate OTP
+        otp = generate_otp()
+        otp_expiry = datetime.utcnow() + timedelta(minutes=10)
+
+        # Store OTP in database
+        users_collection.update_one(
+            {"email": email},
+            {"$set": {
+                "reset_otp": otp,
+                "reset_otp_expiry": otp_expiry
+            }}
+        )
+
+        # Send email with OTP
+        subject = "Password Reset Request"
+        body = f"""
+        Hello,
+
+        Your verification code for password reset is: {otp}
+
+        This code will expire in 10 minutes.
+
+        Best regards,
+        Security Viz Team
+        """
+        send_otp_email(email, otp)
+
+        return jsonify({"message": "Password reset code sent to email"}), 200
+
+    except Exception as e:
+        print(f"[ERROR] Password reset request failed: {str(e)}")
+        return jsonify({"error": "Failed to process password reset request"}), 500
+
+
+@app.route("/verify-reset-otp", methods=["POST"])
+def verify_reset_otp():
+    try:
+        data = request.json
+        email = data.get("email")
+        otp = data.get("otp")
+
+        if not email or not otp:
+            return jsonify({"error": "Email and verification code are required"}), 400
+
+        user = users_collection.find_one({"email": email})
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        if user.get("reset_otp") != otp:
+            return jsonify({"error": "Invalid verification code"}), 400
+
+        if datetime.utcnow() > user.get("reset_otp_expiry"):
+            return jsonify({"error": "Verification code has expired"}), 400
+
+        # Generate reset token
+        reset_token = str(uuid.uuid4())
+        reset_token_expiry = datetime.utcnow() + timedelta(minutes=30)
+
+        # Store reset token in database
+        users_collection.update_one(
+            {"email": email},
+            {"$set": {
+                "reset_token": reset_token,
+                "reset_token_expiry": reset_token_expiry
+            }}
+        )
+
+        return jsonify({
+            "message": "Verification successful",
+            "reset_token": reset_token
+        }), 200
+
+    except Exception as e:
+        print(f"[ERROR] Reset OTP verification failed: {str(e)}")
+        return jsonify({"error": "Verification failed"}), 500
+
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password():
+    try:
+        data = request.json
+        email = data.get("email")
+        reset_token = data.get("reset_token")
+        new_password = data.get("new_password")
+
+        if not all([email, reset_token, new_password]):
+            return jsonify({"error": "Email, reset token, and new password are required"}), 400
+
+        user = users_collection.find_one({
+            "email": email,
+            "reset_token": reset_token,
+            "reset_token_expiry": {"$gt": datetime.utcnow()}
+        })
+
+        if not user:
+            return jsonify({"error": "Invalid or expired reset token"}), 400
+
+        # Hash new password
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), salt)
+
+        # Update password and remove reset tokens
+        users_collection.update_one(
+            {"email": email},
+            {"$set": {"password": hashed_password},
+             "$unset": {
+                 "reset_otp": "",
+                 "reset_otp_expiry": "",
+                 "reset_token": "",
+                 "reset_token_expiry": ""
+             }}
+        )
+
+        return jsonify({"message": "Password has been reset successfully"}), 200
+
+    except Exception as e:
+        print(f"[ERROR] Password reset failed: {str(e)}")
+        return jsonify({"error": "Failed to reset password"}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
