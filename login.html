@@ -277,7 +277,10 @@
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+            return null;
         }
 
         // Password strength checker
@@ -467,12 +470,13 @@
 
                 if (response.ok && data.session_id) {
                     errorDiv.textContent = '';
-                    // Set session ID in a cookie with proper attributes
-                    const cookieValue = `session_id=${data.session_id} path=/; max-age=604800; SameSite=Lax; Secure`;
-                    document.cookie = cookieValue;
                     
-                    // Redirect immediately - no need for delay
-                    window.location.href = 'https://securityviz.site/index.html';
+                    // Set session ID in a cookie with proper attributes for HTTPS
+                    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+                    document.cookie = `session_id=${data.session_id}; path=/; max-age=604800; SameSite=Lax${secure}`;
+                    
+                    // Redirect to index page
+                    window.location.href = 'index.html';
                 } else {
                     console.error('Login failed:', data.error || 'No session ID in response');
                     errorDiv.textContent = data.error || 'Login failed - no session provided';

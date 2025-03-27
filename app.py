@@ -199,13 +199,11 @@ def login():
             "session_id": session_id
         })
         
-        # Set CORS headers with updated origins
+        # Set CORS headers with dynamic origin support
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        # Use condition to allow both development and production
-        if request.headers.get('Origin') == 'http://localhost:8080':
-            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-        else:
-            response.headers.add('Access-Control-Allow-Origin', 'https://securityviz.site')
+        origin = request.headers.get('Origin', '')
+        if origin in ['https://securityviz.site', 'http://localhost:8080']:
+            response.headers.add('Access-Control-Allow-Origin', origin)
         
         return response, 200
 
@@ -213,12 +211,28 @@ def login():
         print(f"[ERROR] Login failed: {str(e)}")
         return jsonify({"error": "Login failed"}), 500
 
-@app.route("/check-session", methods=["GET"])
+@app.route("/check-session", methods=["GET", "OPTIONS"])
 def check_session():
+    # Handle preflight OPTIONS request
+    if request.method == "OPTIONS":
+        response = jsonify({})
+        origin = request.headers.get('Origin', '')
+        if origin in ['https://securityviz.site', 'http://localhost:8080']:
+            response.headers.add('Access-Control-Allow-Origin', origin)
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type, X-Session-ID, Accept, Origin')
+            response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+        
     try:
         session_id = request.headers.get("X-Session-ID")
         if not session_id:
-            return jsonify({"authenticated": False}), 401
+            response = jsonify({"authenticated": False})
+            origin = request.headers.get('Origin', '')
+            if origin in ['https://securityviz.site', 'http://localhost:8080']:
+                response.headers.add('Access-Control-Allow-Origin', origin)
+                response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response, 401
 
         session_data = sessions_collection.find_one({
             "session_id": session_id,
@@ -226,16 +240,31 @@ def check_session():
         })
 
         if not session_data:
-            return jsonify({"authenticated": False}), 401
+            response = jsonify({"authenticated": False})
+            origin = request.headers.get('Origin', '')
+            if origin in ['https://securityviz.site', 'http://localhost:8080']:
+                response.headers.add('Access-Control-Allow-Origin', origin)
+                response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response, 401
 
-        return jsonify({
+        response = jsonify({
             "authenticated": True,
             "username": session_data.get("username")
-        }), 200
+        })
+        origin = request.headers.get('Origin', '')
+        if origin in ['https://securityviz.site', 'http://localhost:8080']:
+            response.headers.add('Access-Control-Allow-Origin', origin)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
 
     except Exception as e:
         print(f"[ERROR] Session check failed: {str(e)}")
-        return jsonify({"error": "Session check failed"}), 500
+        response = jsonify({"error": "Session check failed"})
+        origin = request.headers.get('Origin', '')
+        if origin in ['https://securityviz.site', 'http://localhost:8080']:
+            response.headers.add('Access-Control-Allow-Origin', origin)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 500
 
 @app.route("/logout", methods=["POST"])
 def logout():

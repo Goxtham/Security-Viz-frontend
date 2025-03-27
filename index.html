@@ -663,9 +663,9 @@
       if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    // Check login status when page loads
-    document.addEventListener('DOMContentLoaded', async () => {
-      let sessionId = getCookie('session_id');
+    // Function to check login status
+    function checkLoginStatus() {
+      const sessionId = getCookie('session_id');
       const userInfo = document.getElementById('userInfo');
       
       if (!sessionId) {
@@ -677,19 +677,17 @@
         return;
       }
       
-      try {
-        const response = await fetch('https://security-viz-api.onrender.com/check-session', {
-          method: 'GET',
-          headers: {
-            'X-Session-ID': sessionId,
-            'Accept': 'application/json'
-          },
-          credentials: 'include'
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.authenticated) {
+      fetch('https://security-viz-api.onrender.com/check-session', {
+        method: 'GET',
+        headers: {
+          'X-Session-ID': sessionId,
+          'Accept': 'application/json'
+        },
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.authenticated) {
           userInfo.innerHTML = `
             <span class="welcome-text">Welcome, ${data.username}</span>
             <button class="sign-in-btn" onclick="logout()" title="Sign out">Logout</button>
@@ -703,14 +701,17 @@
             </a>
           `;
         }
-      } catch (error) {
+      })
+      .catch(error => {
+        console.error('Session check error:', error);
+        document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
         userInfo.innerHTML = `
           <a href="login.html">
             <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
           </a>
         `;
-      }
-    });
+      });
+    }
 
     async function logout() {
       const sessionId = getCookie('session_id');
