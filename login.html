@@ -5,65 +5,261 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login with Email Verification</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+
         body {
             font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #c4c3ca;
             background: linear-gradient(135deg, #1F252E 0%, #000 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
         }
 
-        .container {
-            background-color: rgba(31, 37, 46, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        a {
+            cursor: pointer;
+            transition: all 200ms linear;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .link {
+            color: #c4c3ca;
+        }
+
+        .link:hover {
+            color: #01E9F8;
+        }
+
+        p {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        h2, h4 {
+            font-weight: 600;
+            color: #01E9F8;
+        }
+
+        h6 span {
+            padding: 0 20px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .section {
+            position: relative;
             width: 100%;
-            max-width: 400px;
+            display: block;
+        }
+
+        .full-height {
+            min-height: 100vh;
+        }
+
+        [type="checkbox"]:checked,
+        [type="checkbox"]:not(:checked) {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .checkbox:checked + label,
+        .checkbox:not(:checked) + label {
+            position: relative;
+            display: block;
+            text-align: center;
+            width: 60px;
+            height: 16px;
+            border-radius: 8px;
+            padding: 0;
+            margin: 10px auto;
+            cursor: pointer;
+            background-color: #01E9F8;
+        }
+
+        .checkbox:checked + label:before,
+        .checkbox:not(:checked) + label:before {
+            position: absolute;
+            display: block;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: #01E9F8;
+            background-color: #1F252E;
+            font-family: 'unicons';
+            content: '\eb4f';
+            z-index: 20;
+            top: -10px;
+            left: -10px;
+            line-height: 36px;
+            text-align: center;
+            font-size: 24px;
+            transition: all 0.5s ease;
+        }
+
+        .checkbox:checked + label:before {
+            transform: translateX(44px) rotate(-270deg);
+        }
+
+        .card-3d-wrap {
+            position: relative;
+            width: 440px;
+            max-width: 100%;
+            height: 500px;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            perspective: 800px;
+            margin-top: 60px;
+        }
+
+        .card-3d-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            transition: all 600ms ease-out;
+        }
+
+        .card-front, .card-back {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(31, 37, 46, 0.95);
+            background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            background-size: 300%;
+            position: absolute;
+            border-radius: 15px;
+            left: 0;
+            top: 0;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(1, 233, 248, 0.1);
         }
 
-        h2 {
-            text-align: center;
-            color: #01E9F8;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
+            transform: rotateY(180deg);
+        }
+
+        .center-wrap {
+            position: absolute;
+            width: 100%;
+            padding: 0 35px;
+            top: 50%;
+            left: 0;
+            transform: translate3d(0, -50%, 35px) perspective(100px);
+            z-index: 20;
+            display: block;
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
             position: relative;
-        }
-
-        label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #01E9F8;
-            font-size: 0.9rem;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 20px;
         }
 
-        input {
+        .form-style {
+            padding: 13px 20px;
+            padding-left: 55px;
+            height: 48px;
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid rgba(1, 233, 248, 0.2);
+            font-weight: 500;
             border-radius: 8px;
-            background-color: rgba(42, 51, 64, 0.8);
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: 0.5px;
+            outline: none;
             color: #fff;
-            font-size: 1rem;
+            background-color: rgba(42, 51, 64, 0.8);
+            border: 1px solid rgba(1, 233, 248, 0.2);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
         }
 
-        input:focus {
+        .form-style:focus {
             outline: none;
             border-color: #01E9F8;
             box-shadow: 0 0 0 2px rgba(1, 233, 248, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 0;
+            left: 18px;
+            height: 48px;
+            font-size: 24px;
+            line-height: 48px;
+            text-align: left;
+            color: #01E9F8;
+            transition: all 200ms linear;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            color: #01E9F8;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .btn {
+            border-radius: 8px;
+            height: 44px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 200ms linear;
+            padding: 0 30px;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: none;
+            background-color: #01E9F8;
+            color: #000;
+            box-shadow: 0 8px 24px 0 rgba(1, 233, 248, 0.3);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #00b3d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(1, 233, 248, 0.3);
+            color: #000;
+        }
+
+        .error {
+            color: #ff4444;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
         }
 
         .password-strength {
@@ -84,77 +280,6 @@
             font-size: 0.8rem;
             color: #888;
             margin-top: 0.3rem;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: #01E9F8;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #00b3d8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(1, 233, 248, 0.3);
-        }
-
-        .error {
-            color: #ff4444;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .success {
-            color: #00C851;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .otp-section {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(1, 233, 248, 0.1);
-        }
-
-        .resend-otp {
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .resend-otp button {
-            background: none;
-            border: none;
-            color: #01E9F8;
-            cursor: pointer;
-            padding: 0;
-            font-size: 0.875rem;
-        }
-
-        .resend-otp button:hover {
-            text-decoration: underline;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .register-link a {
-            color: #01E9F8;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
         }
 
         .password-requirements {
@@ -190,91 +315,121 @@
             content: "✗";
             margin-right: 0.5rem;
         }
+
+        #otpContainer {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div style="position: relative;">
-                    <input type="password" id="password" name="password" required>
-                    <i id="togglePassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
+    <div class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+                        <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                        <label for="reg-log"></label>
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <!-- Login Card (Front) -->
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3">Log In</h4>
+                                            <form id="loginForm">
+                                                <div class="form-group">
+                                                    <input type="email" id="email" name="email" class="form-style" placeholder="Your Email" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" id="password" name="password" class="form-style" placeholder="Your Password" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i id="togglePassword" class="fas fa-eye-slash password-toggle-icon"></i>
+                                                </div>
+                                                <button type="submit" class="btn mt-4">Login</button>
+                                                <div id="loginError" class="error mt-3"></div>
+                                            </form>
+                                            <p class="mb-0 mt-4 text-center">
+                                                <a href="#" class="link">Forgot your password?</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Register Card (Back) -->
+                                <div class="card-back">
+                                    <div class="center-wrap">
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3">Sign Up</h4>
+                                            <form id="registerForm">
+                                                <div class="form-group">
+                                                    <input type="text" id="username" name="username" class="form-style" placeholder="Your Username" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-user"></i>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="email" id="registerEmail" name="email" class="form-style" placeholder="Your Email" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" id="registerPassword" name="password" class="form-style" placeholder="Your Password" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i id="toggleRegisterPassword" class="fas fa-eye-slash password-toggle-icon"></i>
+                                                    <div class="password-strength">
+                                                        <div class="strength-bar" id="strengthBar"></div>
+                                                    </div>
+                                                    <div class="strength-text" id="strengthText">Password strength: <span>Weak</span></div>
+                                                    <div class="password-requirements">
+                                                        <ul>
+                                                            <li id="length">At least 8 characters</li>
+                                                            <li id="number">Contains a number</li>
+                                                            <li id="special">Contains a special character</li>
+                                                            <li id="uppercase">Contains an uppercase letter</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-style" placeholder="Confirm Password" autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i id="toggleConfirmPassword" class="fas fa-eye-slash password-toggle-icon"></i>
+                                                </div>
+                                                <button type="submit" class="btn mt-4">Register</button>
+                                                <div id="registerError" class="error mt-3"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button type="submit">Login</button>
-            <div id="loginError" class="error"></div>
-        </form>
-
-        <div class="register-link">
-            <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
         </div>
     </div>
 
-    <div class="container" id="registerContainer" style="display: none;">
-        <h2>Register</h2>
-        <form id="registerForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="registerEmail">Email</label>
-                <input type="email" id="registerEmail" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="registerPassword">Password</label>
-                <div style="position: relative;">
-                    <input type="password" id="registerPassword" name="password" required>
-                    <i id="toggleRegisterPassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
-                </div>
-                <div class="password-strength">
-                    <div class="strength-bar" id="strengthBar"></div>
-                </div>
-                <div class="strength-text" id="strengthText">Password strength: <span>Weak</span></div>
-                <div class="password-requirements">
-                    <ul>
-                        <li id="length">At least 8 characters</li>
-                        <li id="number">Contains a number</li>
-                        <li id="special">Contains a special character</li>
-                        <li id="uppercase">Contains an uppercase letter</li>
-                    </ul>
+    <!-- OTP Container -->
+    <div class="container" id="otpContainer">
+        <div class="card-front">
+            <div class="center-wrap">
+                <div class="section text-center">
+                    <h4 class="mb-4 pb-3">Verify Email</h4>
+                    <p>Please enter the OTP sent to your email.</p>
+                    <form id="otpForm">
+                        <div class="form-group">
+                            <input type="text" id="otp" name="otp" class="form-style" placeholder="Enter OTP" autocomplete="off" required>
+                            <i class="input-icon uil uil-key-skeleton"></i>
+                        </div>
+                        <button type="submit" class="btn mt-4">Verify OTP</button>
+                        <div id="otpError" class="error mt-3"></div>
+                    </form>
+                    <div class="mt-4">
+                        <button id="resendOtp" class="link" style="background:none; border:none; color:#01E9F8;">Resend OTP</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <div style="position: relative;">
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                    <i id="toggleConfirmPassword" class="fas fa-eye-slash" style="position: absolute; right: 12px; top: 12px; cursor: pointer; color: #01E9F8;"></i>
-                </div>
-            </div>
-            <button type="submit">Register</button>
-            <div id="registerError" class="error"></div>
-        </form>
-
-        <div class="register-link">
-            <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
-        </div>
-    </div>
-
-    <div class="container" id="otpContainer" style="display: none;">
-        <h2>Verify Email</h2>
-        <p>Please enter the OTP sent to your email.</p>
-        <form id="otpForm">
-            <div class="form-group">
-                <label for="otp">OTP</label>
-                <input type="text" id="otp" name="otp" required>
-            </div>
-            <button type="submit">Verify OTP</button>
-            <div id="otpError" class="error"></div>
-        </form>
-        <div class="resend-otp">
-            <button id="resendOtp">Resend OTP</button>
         </div>
     </div>
 
@@ -336,19 +491,6 @@
             return strength === 4;
         }
 
-        // Form switching
-        document.getElementById('showRegister').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('registerContainer').style.display = 'block';
-        });
-
-        document.getElementById('showLogin').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('registerContainer').style.display = 'none';
-            document.querySelector('.container').style.display = 'block';
-        });
-
         // Password strength monitoring
         document.getElementById('registerPassword').addEventListener('input', function() {
             checkPasswordStrength(this.value);
@@ -386,7 +528,7 @@
 
                 if (response.ok) {
                     currentEmail = email;
-                    document.getElementById('registerContainer').style.display = 'none';
+                    document.querySelector('.card-3d-wrap').style.display = 'none';
                     document.getElementById('otpContainer').style.display = 'block';
                     errorDiv.textContent = '';
                 } else {
@@ -416,7 +558,8 @@
 
                 if (response.ok) {
                     document.getElementById('otpContainer').style.display = 'none';
-                    document.querySelector('.container').style.display = 'block';
+                    document.querySelector('.card-3d-wrap').style.display = 'block';
+                    document.getElementById('reg-log').checked = false;
                     errorDiv.textContent = '';
                     alert('Email verified successfully! Please login.');
                 } else {
