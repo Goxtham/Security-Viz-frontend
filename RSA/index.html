@@ -242,25 +242,125 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
+
+        /* Header & Navigation Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 25, 35, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .logo-text {
+                display: block;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
     </style>
     <link rel="stylesheet" href="../css/quiz.css">
     <script src="../js/chatbot.js"></script>
     <script src="../js/quiz.js"></script>
     <script src="../js/leaderboard.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 
 <body>
-    <!-- Navigation Bar -->
-    <div class="nav-bar" style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(31, 37, 46, 0.95); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 1000; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(1, 233, 248, 0.1);">
-        <div class="nav-links" style="display: flex; align-items: center;">
-            <a href="../index.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Home</a>
-            <a href="../key-strength.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Key Strength Analyzer</a>
-            <a href="../algorithm-comparison.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Algorithm Comparison</a>
+    <!-- Replace the existing navigation bar with this -->
+    <header class="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span class="logo-text" style="color: #ffffff;">Security Viz</span>
+            </a>
+            
+            <nav class="nav-links">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../key-strength.html" class="nav-link">Key Strength</a>
+                <a href="../algorithm-comparison.html" class="nav-link">Comparison</a>
+                
+            </nav>
+            
+            <div class="user-actions" id="userInfo">
+                <!-- This will be populated by JavaScript -->
+            </div>
         </div>
-        <div id="userInfo">
-            <!-- This will be populated by JavaScript -->
-        </div>
-    </div>
+    </header>
 
     <div style="position: fixed; top: 80px; right: 20px; z-index: 999; display: flex; gap: 10px;">
         <button class="quiz-button" onclick="startQuiz('RSA')" style="position: static;">Take Quiz</button>

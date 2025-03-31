@@ -10,641 +10,903 @@
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary: #01E9F8;
+      --primary-dark: #00b3d8;
+      --dark-bg: #0f1923;
+      --card-bg: #1a2634;
+      --text-light: #ffffff;
+      --text-secondary: #a0b3c6;
+      --gradient-bg: linear-gradient(135deg, #0f1923 0%, #1a2634 100%);
+      --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      --glow: 0 0 15px rgba(1, 233, 248, 0.5);
+      --transition-speed: 0.3s;
+    }
     
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
     }
     
     body {
-      background-color: #000;
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      width: 100%;
+      background: var(--gradient-bg);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-light);
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* Navigation Bar Styles */
-    .nav-bar {
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--dark-bg);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-dark);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* Header & Navigation */
+    .header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      background-color: rgba(31, 37, 46, 0.95);
-      padding: 1rem 2rem;
+      background: rgba(15, 25, 35, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .header-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-light);
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .logo-text {
+        display: block;
+      }
     }
 
     .nav-links {
       display: flex;
       align-items: center;
+      gap: 1.5rem;
     }
 
-    .nav-links a {
-      color: #fff;
+    .nav-link {
+      color: var(--text-light);
       text-decoration: none;
-      margin-right: 1.5rem;
-      transition: color 0.3s ease;
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color var(--transition-speed) ease;
     }
 
-    .nav-links a:hover {
-      color: #01E9F8;
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      transition: width var(--transition-speed) ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .welcome-text {
-      color: #01E9F8;
-      font-size: 1.1rem;
-      margin-right: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      display: none;
     }
 
-    .sign-in-btn {
-      background-color: #01E9F8;
-      color: #000;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      cursor: pointer;
+    @media (min-width: 768px) {
+      .welcome-text {
+        display: block;
+      }
+    }
+
+    .welcome-text span {
+      color: var(--primary);
       font-weight: 500;
-      transition: all 0.3s ease;
     }
 
-    .sign-in-btn:hover {
-      background-color: #00b3d8;
-      transform: translateY(-2px);
-    }
-
-    /* Adjust main content to account for fixed nav */
-    section {
-      margin: 5rem auto 3rem;
-      width: 100%;
-      max-width: 100%;
-      padding: 0 10px;
-    }
-
-    @media (min-width: 768px) {
-      section {
-        margin: 8rem auto 6rem;
-      }
-    }
-
-    .container {
-      background-color: #1F252E;
-      width: 100%;
-      max-width: 100%;
-      padding: 15px;
-    }
-
-    @media (min-width: 768px) {
-      .container {
-        padding: 20px;
-      }
-    }
-
-    .wrapper {
-      position: relative;
-      width: 100%;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    @media (min-width: 768px) {
-      .wrapper {
-        padding: 20px;
-        gap: 24px;
-      }
-    }
-
-    .card {
-      position: relative;
-      width: 100%;
-      max-width: 300px;
-      height: 400px;
-      background: #000;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      flex: 1 1 300px;
-      margin: 10px;
-      min-width: 280px;
-    }
-
-    @media (max-width: 767px) {
-      .card {
-        height: 350px;
-        margin: 8px;
-      }
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .card:active {
-        transform: translateY(-5px);
-      }
-    }
-
-    .poster {
-      position: relative;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(45deg, #1F252E, #000);
-    }
-
-    .icon-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-
-    .icon-container i {
-      font-size: 6.5rem;
-      color: #01E9F8;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover .icon-container i {
-      transform: scale(1.2);
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .card:active .icon-container i {
-        transform: scale(1.1);
-      }
-    }
-
-    .poster::before {
-      content: '';
-      position: absolute;
-      bottom: -45%;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      transition: .3s;
-      background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    .card:hover .poster::before {
-      bottom: 0;
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .card:active .poster::before {
-        bottom: 0;
-      }
-    }
-
-    .poster img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transition: .3s;
-      opacity: 0.9;
-    }
-
-    .card:hover .poster img {
-      transform: scale(1.1);
-      opacity: 1;
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .card:active .poster img {
-        transform: scale(1.05);
-        opacity: 1;
-      }
-    }
-
-    .details {
-      position: absolute;
-      bottom: -100%;
-      left: 0;
-      width: 100%;
-      height: auto;
-      padding: 1.5em 1.5em 1.8em;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(16px) saturate(120%);
-      -webkit-backdrop-filter: blur(16px) saturate(120%);
-      transition: .3s;
-      color: #fff;
-      z-index: 2;
-    }
-
-    .card:hover .details {
-      bottom: 0;
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .card:active .details {
-        bottom: 0;
-      }
-      
-      /* Alternative for mobile: always show some details */
-      .details {
-        bottom: -70%;
-        padding: 1em 1.2em;
-      }
-      
-      .details h1 {
-        margin-bottom: 5px !important;
-      }
-    }
-
-    .details h1 {
-      font-size: 1.4em;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #01E9F8;
-    }
-
-    .details .desc {
-      color: #fff;
-      opacity: .8;
-      line-height: 1.4;
-      margin-bottom: 1em;
-      font-size: 1em;
-    }
-
-    @media (max-width: 767px) {
-      .details .desc {
-        font-size: 0.9em;
-        line-height: 1.3;
-        margin-bottom: 0.5em;
-      }
-    }
-
-    .details .tags {
-      display: flex;
-      gap: .375em;
-      margin-bottom: .8em;
-      font-size: .85em;
-      flex-wrap: wrap;
-    }
-
-    .details .tags span {
-      padding: .35rem .65rem;
-      color: #01E9F8;
-      border: 1.5px solid #01E9F8;
-      border-radius: 50px;
-    }
-
-    @media (max-width: 767px) {
-      .details .tags span {
-        padding: .25rem .5rem;
-        font-size: 0.8em;
-      }
-    }
-
-    p {
-      color: #c0c0c5;
-      line-height: 1.7rem;
-    }
-
-    .apps-store {
-      padding: 0.6rem 1.5rem;
-      border: 1px solid #01E9F8;
-      color: #01E9F8;
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .apps-store i {
-      font-size: 1.3rem;
-    }
-
-    .apps-store div span:nth-child(1) {
-      font-size: .7rem;
-      line-height: 13px;
-    }
-
-    .btn:hover {
-      border: 1px solid #01E9F8;
-      color: #01E9F8;
-      box-shadow: 0rem 0rem 1rem 0rem #01E9F8;
-      transition: all .3s ease-in-out;
-    }
-
-    /* For touch devices */
-    @media (hover: none) {
-      .btn:active {
-        border: 1px solid #01E9F8;
-        color: #01E9F8;
-        box-shadow: 0rem 0rem 0.5rem 0rem #01E9F8;
-      }
-    }
-
-    .img-bg::before {
-      content: " ";
-      height: 28vw;
-      width: 28vw;
-      background-color: #01E9F8;
-      position: absolute;
-      border-radius: 50%;
-    }
-
-    h2 {
-      white-space: normal;
-      word-wrap: break-word;
-      text-align: center;
-    }
-
-    @media (min-width: 768px) {
-      h2 {
-        white-space: nowrap;
-      }
-    }
-
-    h2 span {
-      color: #01E9F8;
-    }
-
-    .share-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #01E9F8;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all var(--transition-speed) ease;
       cursor: pointer;
-      transition: background-color 0.3s;
-      z-index: 100;
+      border: none;
+      outline: none;
     }
 
-    .share-button:hover {
-      background-color: #00b3d8;
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--dark-bg);
     }
 
-    /* Chat container styles */
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(1, 233, 248, 0.1);
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 6rem;
+      padding: 2rem 1rem;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .title-main {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #ffffff, var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .title-sub {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .title-icon {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    /* Algorithm Cards Grid */
+    .algorithms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .algorithm-card {
+      position: relative;
+      height: 380px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card-bg);
+      box-shadow: var(--card-shadow);
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+    }
+
+    .algorithm-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .algorithm-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+      z-index: 1;
+      opacity: 0.7;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .algorithm-card:hover::before {
+      opacity: 0.95;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .algorithm-card:hover .card-image {
+      transform: scale(1.1);
+    }
+
+    .card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem;
+      z-index: 2;
+      transform: translateY(calc(100% - 80px));
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .algorithm-card:hover .card-content {
+      transform: translateY(0);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-tag {
+      padding: 0.3rem 0.8rem;
+      background-color: rgba(1, 233, 248, 0.15);
+      color: var(--primary);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .card-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all var(--transition-speed) ease 0.1s;
+    }
+
+    .algorithm-card:hover .card-description {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--primary);
+      color: var(--dark-bg);
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all var(--transition-speed) ease 0.2s;
+    }
+
+    .algorithm-card:hover .card-button {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* AI Assistant Button */
+    .assistant-container {
+      text-align: center;
+      margin: 4rem 0 2rem;
+    }
+
+    .assistant-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1.5rem;
+      background-color: rgba(1, 233, 248, 0.1);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+    }
+
+    .assistant-button:hover {
+      background-color: rgba(1, 233, 248, 0.2);
+      box-shadow: var(--glow);
+      transform: translateY(-3px);
+    }
+
+    .assistant-icon {
+      font-size: 1.5rem;
+    }
+
+    .assistant-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+
+    .assistant-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .assistant-title {
+      font-size: 1.1rem;
+    }
+
+    /* Chat Container */
     .chat-container {
       display: none;
       position: fixed;
       bottom: 80px;
       right: 20px;
-      width: 300px;
-      height: 400px;
-      background-color: #1F252E;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      width: 350px;
+      height: 500px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       flex-direction: column;
       overflow: hidden;
       z-index: 99;
+      border: 1px solid rgba(1, 233, 248, 0.2);
     }
 
     .chat-header {
-      background-color: #01E9F8;
-      color: #000;
-      padding: 10px;
-      font-weight: bold;
-      text-align: center;
+      background-color: rgba(1, 233, 248, 0.1);
+      padding: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border-bottom: 1px solid rgba(1, 233, 248, 0.2);
+    }
+
+    .chat-header-icon {
+      color: var(--primary);
+      font-size: 1.2rem;
     }
 
     .chat-messages {
       flex: 1;
-      padding: 10px;
+      padding: 1rem;
       overflow-y: auto;
-      background-color: #2A3340;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      max-width: 85%;
+      word-wrap: break-word;
+      line-height: 1.4;
+    }
+
+    .user-message {
+      background-color: rgba(1, 233, 248, 0.2);
+      color: var(--text-light);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bot-message {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
     }
 
     .chat-input {
       display: flex;
-      border-top: 1px solid #444;
-      padding: 10px;
+      padding: 1rem;
+      gap: 0.5rem;
+      border-top: 1px solid rgba(1, 233, 248, 0.1);
     }
 
     .chat-input input {
       flex: 1;
-      padding: 8px;
+      padding: 0.8rem 1rem;
       border: none;
-      border-radius: 20px;
-      margin-right: 5px;
-      background-color: #3A4555;
-      color: white;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      outline: none;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .chat-input input:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 2px rgba(1, 233, 248, 0.2);
     }
 
     .chat-input button {
-      background-color: #01E9F8;
-      color: #000;
+      background-color: var(--primary);
+      color: var(--dark-bg);
       border: none;
-      border-radius: 20px;
-      padding: 8px 15px;
+      border-radius: 8px;
+      padding: 0.8rem;
       cursor: pointer;
+      transition: all var(--transition-speed) ease;
     }
 
-    /* Media queries for better responsiveness */
-    @media (max-width: 576px) {
-      .chat-container {
-        width: calc(100% - 40px);
-        height: 50vh;
-        bottom: 70px;
+    .chat-input button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* Share Button */
+    .share-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary);
+      color: var(--dark-bg);
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      z-index: 100;
+      font-size: 1.2rem;
+    }
+
+    .share-button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: var(--glow);
+    }
+
+    /* Leaderboard Modal */
+    .leaderboard-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1001;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .leaderboard-content {
+      position: relative;
+      background-color: var(--card-bg);
+      margin: 5% auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 800px;
+      border-radius: 16px;
+      border: 1px solid rgba(1, 233, 248, 0.2);
+      box-shadow: var(--card-shadow);
+    }
+
+    .leaderboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+    }
+
+    .leaderboard-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .close-leaderboard {
+      font-size: 1.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color var(--transition-speed) ease;
+    }
+
+    .close-leaderboard:hover {
+      color: var(--primary);
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+    }
+
+    .leaderboard-table th {
+      background-color: rgba(1, 233, 248, 0.05);
+      color: var(--primary);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .leaderboard-table th:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: rgba(1, 233, 248, 0.2);
+    }
+
+    .leaderboard-table tr:hover {
+      background-color: rgba(1, 233, 248, 0.03);
+    }
+
+    .medal-1 {
+      color: gold;
+    }
+
+    .medal-2 {
+      color: silver;
+    }
+
+    .medal-3 {
+      color: #cd7f32;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(1, 233, 248, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 1rem;
       }
       
-      .share-button {
-        width: 45px;
-        height: 45px;
+      .nav-links {
+        gap: 1rem;
       }
+      
+      .nav-link {
+        font-size: 0.85rem;
+      }
+      
+      .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .main-content {
+        padding: 1rem;
+        margin-top: 5rem;
+      }
+      
+      .title-main {
+        font-size: 2rem;
+      }
+      
+      .title-sub {
+        font-size: 1rem;
+      }
+      
+      .algorithms-grid {
+        gap: 1.5rem;
+      }
+      
+      .algorithm-card {
+        height: 350px;
+      }
+      
+      .chat-container {
+        width: calc(100% - 40px);
+        height: 60vh;
+      }
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(1, 233, 248, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(1, 233, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(1, 233, 248, 0); }
+    }
+
+    /* Animation Classes */
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
 
 <body>
-  <!-- Navigation Bar -->
-  <div class="nav-bar">
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="key-strength.html">Key Strength Analyzer</a>
-      <a href="algorithm-comparison.html">Algorithm Comparison</a>
-    </div>
-    <div id="userInfo">
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-shield-halved logo-icon"></i>
+        <span class="logo-text">Security Viz</span>
+      </a>
+      
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="key-strength.html" class="nav-link">Key Strength</a>
+        <a href="algorithm-comparison.html" class="nav-link">Comparison</a>
+        <button class="btn btn-outline" onclick="showOverallLeaderboard()">
+          <i class="fas fa-trophy btn-icon"></i>
+          <span class="d-none d-md-inline">Rankings</span>
+        </button>
+      </nav>
+      
+      <div class="user-actions" id="userInfo">
       <!-- This will be populated by JavaScript -->
-      <div class="welcome-text" id="welcome-text" style="display: none;">Welcome, <span id="username"></span></div>
-      <button class="sign-in-btn" id="sign-in-btn" onclick="window.location.href='login.html'" title="Sign In">Sign In</button>
     </div>
   </div>
+  </header>
 
-  <section>
-    <div class="container rounded-4">
-      <div class="row justify-content-between align-items-center p-2 p-md-3">
-        <div class="col-12">
-          <h2 class="display-6 fw-bold text-white mb-3 mb-md-5">
-            <span><i class="fa-solid fa-user-secret"></i></span>
-            Security <span>Algorithm</span> Visualization <span>Tool</span>
-          </h2>
-          
-          <div class="wrapper">
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="section-title">
+      <i class="fa-solid fa-user-shield title-icon"></i>
+      <h1 class="title-main">Security Algorithm Visualization</h1>
+      <p class="title-sub">Explore and understand modern cryptographic algorithms through interactive visualizations</p>
+    </div>
+
+    <div class="algorithms-grid">
             <!-- AES Card -->
-            <div class="card" onclick="window.location.href='AES/index.html';">
-              <div class="poster">
-                <img src="Images/AES.jpeg" alt="AES Algorithm">
+      <div class="algorithm-card" onclick="window.location.href='AES/index.html';">
+        <img src="Images/AES.jpeg" alt="AES Algorithm" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">AES Algorithm</h3>
+          <div class="card-tags">
+            <span class="card-tag">Symmetric</span>
+            <span class="card-tag">Block Cipher</span>
+            <span class="card-tag">128-bit</span>
               </div>
-              <div class="details">
-                <h1>AES Algorithm</h1>
-                <div class="tags">
-                  <span>Symmetric</span>
-                  <span>Block Cipher</span>
-                  <span>128-bit</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   Advanced Encryption Standard (AES) is a symmetric block cipher chosen by the U.S. government to protect classified information.
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
+          </div>
               </div>
             </div>
 
             <!-- DES Card -->
-            <div class="card" onclick="window.location.href='DES/index.html';">
-              <div class="poster">
-                <img src="Images/DES.png" alt="DES Algorithm">
+      <div class="algorithm-card" onclick="window.location.href='DES/index.html';">
+        <img src="Images/DES.png" alt="DES Algorithm" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">DES Algorithm</h3>
+          <div class="card-tags">
+            <span class="card-tag">Symmetric</span>
+            <span class="card-tag">Block Cipher</span>
+            <span class="card-tag">56-bit</span>
               </div>
-              <div class="details">
-                <h1>DES Algorithm</h1>
-                <div class="tags">
-                  <span>Symmetric</span>
-                  <span>Block Cipher</span>
-                  <span>56-bit</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   Data Encryption Standard (DES) is a symmetric-key block cipher published by the National Institute of Standards and Technology (NIST).
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
+          </div>
               </div>
             </div>
 
             <!-- RSA Card -->
-            <div class="card" onclick="window.location.href='RSA/index.html';">
-              <div class="poster">
-                <img src="Images/RSA.jpeg" alt="RSA Algorithm">
+      <div class="algorithm-card" onclick="window.location.href='RSA/index.html';">
+        <img src="Images/RSA.jpeg" alt="RSA Algorithm" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">RSA Algorithm</h3>
+          <div class="card-tags">
+            <span class="card-tag">Asymmetric</span>
+            <span class="card-tag">Public Key</span>
+            <span class="card-tag">Cryptography</span>
               </div>
-              <div class="details">
-                <h1>RSA Algorithm</h1>
-                <div class="tags">
-                  <span>Asymmetric</span>
-                  <span>Public Key</span>
-                  <span>Cryptography</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem widely used for secure data transmission.
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
+          </div>
               </div>
             </div>
 
             <!-- SHA-256 Card -->
-            <div class="card" onclick="window.location.href='Imp.html';">
-              <div class="poster">
-                <img src="Images/SHA.jpeg" alt="SHA-256 Algorithm">
+      <div class="algorithm-card" onclick="window.location.href='Imp.html';">
+        <img src="Images/SHA.jpeg" alt="SHA-256 Algorithm" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">SHA-256</h3>
+          <div class="card-tags">
+            <span class="card-tag">Hash Function</span>
+            <span class="card-tag">256-bit</span>
+            <span class="card-tag">One-way</span>
               </div>
-              <div class="details">
-                <h1>SHA-256</h1>
-                <div class="tags">
-                  <span>Hash Function</span>
-                  <span>256-bit</span>
-                  <span>One-way</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   SHA-256 is a cryptographic hash function that generates a fixed-size 256-bit (32-byte) hash value.
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
+          </div>
               </div>
             </div>
 
             <!-- Quantum Card -->
-            <div class="card" onclick="window.location.href='Quantum/index.html';">
-              <div class="poster">
-                <img src="Images/QUANTUM.jpeg" alt="Quantum Cryptography">
+      <div class="algorithm-card" onclick="window.location.href='Quantum/index.html';">
+        <img src="Images/QUANTUM.jpeg" alt="Quantum Cryptography" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Quantum Cryptography</h3>
+          <div class="card-tags">
+            <span class="card-tag">Quantum</span>
+            <span class="card-tag">Key Distribution</span>
+            <span class="card-tag">Future</span>
               </div>
-              <div class="details">
-                <h1>Quantum Cryptography</h1>
-                <div class="tags">
-                  <span>Quantum</span>
-                  <span>Key Distribution</span>
-                  <span>Future</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   Quantum cryptography uses principles of quantum mechanics to guarantee secure communication.
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
+          </div>
               </div>
             </div>
 
             <!-- Blowfish Card -->
-            <div class="card" onclick="window.location.href='Blowfish/index.html';">
-              <div class="poster">
-                <img src="Images/BLOWFISH.png" alt="Blowfish Algorithm">
+      <div class="algorithm-card" onclick="window.location.href='Blowfish/index.html';">
+        <img src="Images/BLOWFISH.png" alt="Blowfish Algorithm" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Blowfish Algorithm</h3>
+          <div class="card-tags">
+            <span class="card-tag">Symmetric</span>
+            <span class="card-tag">Block Cipher</span>
+            <span class="card-tag">Variable Key</span>
               </div>
-              <div class="details">
-                <h1>Blowfish Algorithm</h1>
-                <div class="tags">
-                  <span>Symmetric</span>
-                  <span>Block Cipher</span>
-                  <span>Variable Key</span>
-                </div>
-                <p class="desc">
+          <p class="card-description">
                   Blowfish is a symmetric-key block cipher with a variable key length from 32 bits to 448 bits.
                 </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Explore
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Comparison Button centered -->
-  <section class="text-center mt-3 mt-md-5">
-    <button class="btn rounded-5 apps-store" onclick="toggleChat()">
-      <span class="d-flex align-items-center justify-content-center">
-        <span><i class="fa-solid fa-robot"></i></span>
-        <div class="ms-2 d-flex flex-column text-start">
-          <span class="">AI</span>
-          <span class="">Assistant</span>
+    <!-- AI Assistant Button -->
+    <div class="assistant-container">
+      <button class="assistant-button" onclick="toggleChat()">
+        <i class="fa-solid fa-robot assistant-icon"></i>
+        <div class="assistant-text">
+          <span class="assistant-label">Need help?</span>
+          <span class="assistant-title">AI Assistant</span>
         </div>
-      </span>
     </button>
-  </section>
+    </div>
+  </main>
 
   <!-- Chatbot Container -->
   <div class="chat-container" id="chat-container">
-    <div class="chat-header">AI Security Assistant</div>
-    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-header">
+      <i class="fa-solid fa-robot chat-header-icon"></i>
+      <span>AI Security Assistant</span>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="message bot-message">
+        Hello! I'm your security assistant. How can I help you understand cryptographic algorithms today?
+      </div>
+    </div>
     <div class="chat-input">
       <input type="text" id="user-input" placeholder="Ask about security algorithms..." onkeypress="if(event.key === 'Enter') handleUserInput()">
-      <button onclick="handleUserInput()">Send</button>
+      <button onclick="handleUserInput()">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 
@@ -652,6 +914,31 @@
   <button class="share-button" onclick="sharePage()" title="Share this page">
     <i class="fa-solid fa-share-alt"></i>
   </button>
+
+  <!-- Leaderboard Modal -->
+  <div class="leaderboard-modal" id="overallLeaderboardModal">
+    <div class="leaderboard-content">
+      <div class="leaderboard-header">
+        <h2><i class="fas fa-trophy"></i> Overall Rankings</h2>
+        <span class="close-leaderboard" onclick="closeOverallLeaderboard()">&times;</span>
+      </div>
+      <div class="leaderboard-body">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Average Score</th>
+              <th>Algorithms Completed</th>
+            </tr>
+          </thead>
+          <tbody id="overallLeaderboardBody">
+            <!-- Will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -671,35 +958,40 @@
       
       if (!sessionId) {
         userInfo.innerHTML = `
-          <a href="login.html">
-            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
-          </a>
+          <button class="btn btn-primary" onclick="window.location.href='login.html'" title="Sign in to your account">
+            <i class="fas fa-sign-in-alt btn-icon"></i>
+            <span>Sign In</span>
+          </button>
         `;
         return;
       }
       
       fetch('https://security-viz-api.onrender.com/check-session', {
-        method: 'GET',
-        headers: {
-          'X-Session-ID': sessionId,
-          'Accept': 'application/json'
-        },
-        credentials: 'include'
+          method: 'GET',
+          headers: {
+            'X-Session-ID': sessionId,
+            'Accept': 'application/json'
+          },
+          credentials: 'include'
       })
       .then(response => response.json())
       .then(data => {
         if (data.authenticated) {
           userInfo.innerHTML = `
-            <span class="welcome-text" style="color: #01E9F8; font-size: 1.1rem; margin-right: 1rem;">Welcome, ${data.username}</span>
-            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" onclick="logout()" title="Sign out">Logout</button>
+            <div class="welcome-text">Welcome, <span>${data.username}</span></div>
+            <button class="btn btn-primary" onclick="logout()" title="Sign out">
+              <i class="fas fa-sign-out-alt btn-icon"></i>
+              <span class="d-none d-md-inline">Logout</span>
+            </button>
           `;
         } else {
           // If session is invalid, remove the cookie
           document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
           userInfo.innerHTML = `
-            <a href="login.html">
-              <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
-            </a>
+            <button class="btn btn-primary" onclick="window.location.href='login.html'" title="Sign in to your account">
+              <i class="fas fa-sign-in-alt btn-icon"></i>
+              <span>Sign In</span>
+            </button>
           `;
         }
       })
@@ -707,9 +999,10 @@
         console.error('Session check error:', error);
         document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
         userInfo.innerHTML = `
-          <a href="login.html">
-            <button class="sign-in-btn" style="background-color: #01E9F8; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;" title="Sign in to your account">Sign In</button>
-          </a>
+          <button class="btn btn-primary" onclick="window.location.href='login.html'" title="Sign in to your account">
+            <i class="fas fa-sign-in-alt btn-icon"></i>
+            <span>Sign In</span>
+          </button>
         `;
       });
     }
@@ -765,61 +1058,193 @@
         : 'none';
     }
 
-    // Add touch support for cards on mobile devices
-    document.addEventListener('DOMContentLoaded', function() {
-      const cards = document.querySelectorAll('.card');
+    function handleUserInput() {
+      const userInput = document.getElementById('user-input');
+      const chatMessages = document.getElementById('chat-messages');
       
-      cards.forEach(card => {
-        card.addEventListener('touchstart', function() {
-          this.classList.add('touch-active');
-        }, {passive: true});
-        
-        card.addEventListener('touchend', function() {
+      if (userInput.value.trim() === '') return;
+      
+      // Add user message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user-message';
+      userMessage.textContent = userInput.value;
+      chatMessages.appendChild(userMessage);
+      
+      // Clear input
+      const userQuestion = userInput.value;
+      userInput.value = '';
+      
+      // Show typing indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message bot-message';
+      typingIndicator.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+      chatMessages.appendChild(typingIndicator);
+      
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Simulate response after delay
           setTimeout(() => {
-            this.classList.remove('touch-active');
-          }, 300);
-        }, {passive: true});
-      });
-    });
+        // Remove typing indicator
+        chatMessages.removeChild(typingIndicator);
+        
+        // Add bot response based on user question
+        const botMessage = document.createElement('div');
+        botMessage.className = 'message bot-message';
+        
+        // Simple response logic
+        if (userQuestion.toLowerCase().includes('aes')) {
+          botMessage.textContent = "AES (Advanced Encryption Standard) is a symmetric encryption algorithm that uses the same key for both encryption and decryption. It operates on blocks of data and is considered very secure for protecting sensitive information.";
+        } else if (userQuestion.toLowerCase().includes('rsa')) {
+          botMessage.textContent = "RSA is an asymmetric encryption algorithm that uses a pair of keys: a public key for encryption and a private key for decryption. It's widely used for secure data transmission and digital signatures.";
+        } else if (userQuestion.toLowerCase().includes('des')) {
+          botMessage.textContent = "DES (Data Encryption Standard) is an older symmetric encryption algorithm with a 56-bit key. It's now considered insecure due to its small key size and has been largely replaced by AES.";
+        } else if (userQuestion.toLowerCase().includes('sha')) {
+          botMessage.textContent = "SHA-256 is a cryptographic hash function that generates a unique 256-bit (32-byte) hash value. It's one-way, meaning you can't derive the original input from the hash, making it useful for password storage and data integrity verification.";
+        } else if (userQuestion.toLowerCase().includes('quantum')) {
+          botMessage.textContent = "Quantum cryptography uses principles of quantum mechanics to secure communications. Unlike traditional cryptography, which relies on mathematical complexity, quantum cryptography is based on the fundamental properties of quantum physics.";
+        } else if (userQuestion.toLowerCase().includes('blowfish')) {
+          botMessage.textContent = "Blowfish is a symmetric-key block cipher with a variable key length from 32 bits to 448 bits. It was designed by Bruce Schneier and is known for its speed and effectiveness.";
+        } else {
+          botMessage.textContent = "I can provide information about various security algorithms like AES, RSA, DES, SHA-256, Quantum Cryptography, and Blowfish. What would you like to know?";
+        }
+        
+        chatMessages.appendChild(botMessage);
+        
+        // Scroll to bottom again
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1500);
+    }
 
-    // Most importantly, make sure this is called when the page loads
-    document.addEventListener('DOMContentLoaded', () => {
+    function showOverallLeaderboard() {
+      const modal = document.getElementById('overallLeaderboardModal');
+      modal.style.display = 'block';
+      
+      // Show loading state
+      const tbody = document.getElementById('overallLeaderboardBody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <p>Loading leaderboard data...</p>
+          </td>
+        </tr>
+      `;
+      
+      fetchOverallLeaderboard();
+    }
+
+    function closeOverallLeaderboard() {
+      const modal = document.getElementById('overallLeaderboardModal');
+      modal.style.display = 'none';
+    }
+
+    async function fetchOverallLeaderboard() {
+      const sessionId = getCookie('session_id');
+      try {
+        const response = await fetch('https://security-viz-api.onrender.com/get-overall-leaderboard', {
+          method: 'GET',
+          headers: {
+            'X-Session-ID': sessionId,
+            'Accept': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch leaderboard');
+        }
+        
+        const data = await response.json();
+        if (data.leaderboard && Array.isArray(data.leaderboard)) {
+          updateOverallLeaderboard(data.leaderboard);
+        } else {
+          throw new Error('Invalid leaderboard data');
+        }
+      } catch (error) {
+        console.error('Error fetching overall leaderboard:', error);
+        const tbody = document.getElementById('overallLeaderboardBody');
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: #ff4444;">
+              <i class="fas fa-exclamation-circle"></i>
+              <p>Failed to load leaderboard. Please try again later.</p>
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function updateOverallLeaderboard(leaderboardData) {
+      const tbody = document.getElementById('overallLeaderboardBody');
+      tbody.innerHTML = '';
+
+      if (leaderboardData.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center;">
+              <i class="fas fa-info-circle"></i>
+              <p>No scores available yet. Complete some quizzes to appear on the leaderboard!</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      leaderboardData.forEach((user, index) => {
+        const row = document.createElement('tr');
+        
+        // Add medal emoji for top 3
+        let rankDisplay = index + 1;
+        if (index === 0) rankDisplay = '🥇 1';
+        else if (index === 1) rankDisplay = '🥈 2';
+        else if (index === 2) rankDisplay = '🥉 3';
+        
+        row.innerHTML = `
+          <td>${rankDisplay}</td>
+          <td>${user.username}</td>
+          <td>${user.averageScore.toFixed(2)}%</td>
+          <td>${user.algorithmsCompleted}/6</td>
+        `;
+        
+        if (index < 3) {
+          row.classList.add(`medal-${index + 1}`);
+        }
+        
+        tbody.appendChild(row);
+      });
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('overallLeaderboardModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Add animation to elements when they come into view
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize animations
+      const animateElements = document.querySelectorAll('.algorithm-card, .section-title, .assistant-button');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      animateElements.forEach(el => {
+        observer.observe(el);
+      });
+      
+      // Check login status
       checkLoginStatus();
     });
   </script>
-
-  <link rel="stylesheet" href="css/chatbot.css">
-  <script src="js/chatbot.js"></script>
-
-  <!-- Add these styles for chat messages -->
-  <style>
-    .message {
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      border-radius: 15px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-    
-    .user-message {
-      background-color: #01E9F8;
-      color: #000;
-      align-self: flex-end;
-      margin-left: auto;
-    }
-    
-    .bot-message {
-      background-color: #3A4555;
-      color: #fff;
-      align-self: flex-start;
-    }
-    
-    .chat-messages {
-      display: flex;
-      flex-direction: column;
-    }
-  </style>
 </body>
 
 </html>
-

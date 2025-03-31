@@ -14,14 +14,7 @@ import bcrypt
 import uuid
 
 app = Flask(__name__)
-CORS(app, resources={
-    r"/*": {
-        "origins": ["https://securityviz.site", "http://localhost:8080"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "X-Session-ID", "Accept", "Origin"],
-        "supports_credentials": True
-    }
-})
+CORS(app, supports_credentials=True)  # Enable CORS for all routes
 app.secret_key = os.urandom(24)  # Generate a random secret key for session management
 
 # Load environment variables
@@ -573,6 +566,46 @@ def reset_password():
     except Exception as e:
         print(f"[ERROR] Password reset failed: {str(e)}")
         return jsonify({"error": "Failed to reset password"}), 500
+
+@app.route("/get-overall-leaderboard", methods=["GET"])
+def get_overall_leaderboard():
+    try:
+        # Aggregation pipeline to calculate overall scores
+        pipeline = [
+            # Group by user_id and username to get their scores
+            {
+                "$group": {
+                    "_id": {
+                        "user_id": "$user_id",
+                        "username": "$username"
+                    },
+                    "totalScore": {"$sum": "$percentage"},
+                    "algorithmsCompleted": {"$addToSet": "$algorithm"},
+                    "scores": {"$push": "$percentage"}
+                }
+            },
+            # Calculate average score
+            {
+                "$project": {
+                    "username": "$_id.username",
+                    "averageScore": {"$avg": "$scores"},
+                    "algorithmsCompleted": {"$size": "$algorithmsCompleted"}
+                }
+            },
+            # Sort by average score in descending order
+            {"$sort": {"averageScore": -1}},
+            # Limit to top 10 users
+            {"$limit": 10}
+        ]
+
+        # Execute the aggregation pipeline
+        leaderboard = list(scores_collection.aggregate(pipeline))
+
+        return jsonify({"leaderboard": leaderboard}), 200
+
+    except Exception as e:
+        print(f"[ERROR] Fetching overall leaderboard failed: {str(e)}")
+        return jsonify({"error": "Failed to fetch overall leaderboard"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -424,19 +424,143 @@ function handleComplete() {
     <script src="../js/chatbot.js"></script>
     <script src="../js/quiz.js"></script>
     <script src="../js/leaderboard.js"></script>
+    <style>
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 25, 35, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(1, 233, 248, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: #01E9F8;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .logo-text {
+                display: block;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #01E9F8;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #01E9F8;
+            border: 1px solid #01E9F8;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: rgba(1, 233, 248, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(1, 233, 248, 0.5);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text {
+            color: #01E9F8;
+            font-size: 1.1rem;
+            margin-right: 1rem;
+        }
+
+        .sign-in-btn {
+            background-color: #01E9F8;
+            color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sign-in-btn:hover {
+            background-color: #00b3d8;
+            transform: translateY(-2px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
-    <div class="nav-bar" style="position: fixed; top: 0; left: 0; right: 0; background-color: rgba(31, 37, 46, 0.95); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 1000; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(1, 233, 248, 0.1);">
-        <div class="nav-links" style="display: flex; align-items: center;">
-            <a href="../index.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Home</a>
-            <a href="../key-strength.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Key Strength Analyzer</a>
-            <a href="../algorithm-comparison.html" style="color: #fff; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s ease;">Algorithm Comparison</a>
+    <header class="header">
+      <div class="header-container">
+        <a href="../index.html" class="logo">
+          <i class="fa-solid fa-shield-halved logo-icon"></i>
+          <span class="logo-text" style="color: #ffffff;">Security Viz</span>
+        </a>
+        
+        <nav class="nav-links">
+          <a href="../index.html" class="nav-link">Home</a>
+          <a href="../key-strength.html" class="nav-link">Key Strength</a>
+          <a href="../algorithm-comparison.html" class="nav-link">Comparison</a>
+          
+        </nav>
+        
+        <div class="user-actions" id="userInfo">
+          <!-- This will be populated by JavaScript -->
         </div>
-        <div id="userInfo">
-            <!-- This will be populated by JavaScript -->
-        </div>
-    </div>
+      </div>
+    </header>
 
     <div style="position: fixed; top: 80px; right: 20px; z-index: 999; display: flex; gap: 10px;">
         <button class="quiz-button" onclick="startQuiz('DES')" style="position: static;">Take Quiz</button>
@@ -1115,6 +1239,64 @@ function handleComplete() {
                 document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
                 window.location.reload();
             }
+        }
+    </script>
+    <script>
+        // Leaderboard Modal Functions
+        function showOverallLeaderboard() {
+            document.getElementById('leaderboardModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            fetchOverallLeaderboard();
+        }
+
+        function closeOverallLeaderboard() {
+            document.getElementById('leaderboardModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('leaderboardModal')) {
+                closeOverallLeaderboard();
+            }
+        }
+
+        async function fetchOverallLeaderboard() {
+            try {
+                const response = await fetch('/get-overall-leaderboard');
+                const data = await response.json();
+                if (data.error) {
+                    console.error('Error:', data.error);
+                    return;
+                }
+                updateOverallLeaderboard(data);
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+            }
+        }
+
+        function updateOverallLeaderboard(leaderboardData) {
+            const tbody = document.querySelector('#leaderboardTable tbody');
+            tbody.innerHTML = '';
+            
+            leaderboardData.forEach((user, index) => {
+                const row = document.createElement('tr');
+                const rank = index + 1;
+                let rankDisplay = rank.toString();
+                
+                // Add medals for top 3
+                if (rank === 1) rankDisplay = '🥇 1';
+                else if (rank === 2) rankDisplay = '🥈 2';
+                else if (rank === 3) rankDisplay = '🥉 3';
+                
+                row.innerHTML = `
+                    <td>${rankDisplay}</td>
+                    <td>${user.username}</td>
+                    <td>${user.average_score.toFixed(2)}</td>
+                    <td>${user.completed_algorithms}</td>
+                `;
+                tbody.appendChild(row);
+            });
         }
     </script>
 </body>
