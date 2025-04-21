@@ -648,17 +648,25 @@
     }
 
     .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(1, 233, 248, 0.1);
-      border-top-color: var(--primary);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-left: 2px solid #00d2ff;
       border-radius: 50%;
+      width: 20px;
+      height: 20px;
       animation: spin 1s linear infinite;
-      margin: 2rem auto;
+      display: inline-block;
+      vertical-align: middle;
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .bot-message.loading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     /* Responsive Adjustments */
@@ -877,7 +885,26 @@
               </div>
             </div>
           </div>
+
+            <!-- Hybrid Crypto Auth Card -->
+      <div class="algorithm-card" onclick="window.location.href='hybrid-auth/index.html';">
+        <img src="Images/hybrid-auth.jpg" alt="Hybrid Cryptographic Authentication" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">Hybrid Cryptographic Authentication</h3>
+          <div class="card-tags">
+            <span class="card-tag">Biometric</span>
+            <span class="card-tag">Password</span>
+            <span class="card-tag">AES+SHA</span>
+          </div>
+          <p class="card-description">
+            A cutting-edge authentication system combining facial recognition with password-based security, encrypted using AES and SHA for maximum protection.
+          </p>
+          <div class="card-button">
+            <i class="fas fa-play"></i> Learn More
+          </div>
         </div>
+      </div>
+    </div>
 
     <!-- AI Assistant Button -->
     <div class="assistant-container">
@@ -898,15 +925,13 @@
       <span>AI Security Assistant</span>
     </div>
     <div class="chat-messages" id="chat-messages">
-      <div class="message bot-message">
-        Hello! I'm your security assistant. How can I help you understand cryptographic algorithms today?
-      </div>
+      
     </div>
     <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Ask about security algorithms..." onkeypress="if(event.key === 'Enter') handleUserInput()">
+      <input type="text" id="user-input" placeholder="Ask about security algorithms..." onkeydown="if(event.key === 'Enter') handleUserInput()">
       <button onclick="handleUserInput()">
-        <i class="fas fa-paper-plane"></i>
-      </button>
+      <i class="fas fa-paper-plane"></i>
+    </button>
     </div>
   </div>
 
@@ -1058,63 +1083,7 @@
         : 'none';
     }
 
-    function handleUserInput() {
-      const userInput = document.getElementById('user-input');
-      const chatMessages = document.getElementById('chat-messages');
-      
-      if (userInput.value.trim() === '') return;
-      
-      // Add user message
-      const userMessage = document.createElement('div');
-      userMessage.className = 'message user-message';
-      userMessage.textContent = userInput.value;
-      chatMessages.appendChild(userMessage);
-      
-      // Clear input
-      const userQuestion = userInput.value;
-      userInput.value = '';
-      
-      // Show typing indicator
-      const typingIndicator = document.createElement('div');
-      typingIndicator.className = 'message bot-message';
-      typingIndicator.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-      chatMessages.appendChild(typingIndicator);
-      
-      // Scroll to bottom
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      // Simulate response after delay
-          setTimeout(() => {
-        // Remove typing indicator
-        chatMessages.removeChild(typingIndicator);
-        
-        // Add bot response based on user question
-        const botMessage = document.createElement('div');
-        botMessage.className = 'message bot-message';
-        
-        // Simple response logic
-        if (userQuestion.toLowerCase().includes('aes')) {
-          botMessage.textContent = "AES (Advanced Encryption Standard) is a symmetric encryption algorithm that uses the same key for both encryption and decryption. It operates on blocks of data and is considered very secure for protecting sensitive information.";
-        } else if (userQuestion.toLowerCase().includes('rsa')) {
-          botMessage.textContent = "RSA is an asymmetric encryption algorithm that uses a pair of keys: a public key for encryption and a private key for decryption. It's widely used for secure data transmission and digital signatures.";
-        } else if (userQuestion.toLowerCase().includes('des')) {
-          botMessage.textContent = "DES (Data Encryption Standard) is an older symmetric encryption algorithm with a 56-bit key. It's now considered insecure due to its small key size and has been largely replaced by AES.";
-        } else if (userQuestion.toLowerCase().includes('sha')) {
-          botMessage.textContent = "SHA-256 is a cryptographic hash function that generates a unique 256-bit (32-byte) hash value. It's one-way, meaning you can't derive the original input from the hash, making it useful for password storage and data integrity verification.";
-        } else if (userQuestion.toLowerCase().includes('quantum')) {
-          botMessage.textContent = "Quantum cryptography uses principles of quantum mechanics to secure communications. Unlike traditional cryptography, which relies on mathematical complexity, quantum cryptography is based on the fundamental properties of quantum physics.";
-        } else if (userQuestion.toLowerCase().includes('blowfish')) {
-          botMessage.textContent = "Blowfish is a symmetric-key block cipher with a variable key length from 32 bits to 448 bits. It was designed by Bruce Schneier and is known for its speed and effectiveness.";
-        } else {
-          botMessage.textContent = "I can provide information about various security algorithms like AES, RSA, DES, SHA-256, Quantum Cryptography, and Blowfish. What would you like to know?";
-        }
-        
-        chatMessages.appendChild(botMessage);
-        
-        // Scroll to bottom again
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1500);
-    }
+    
 
     function showOverallLeaderboard() {
       const modal = document.getElementById('overallLeaderboardModal');
@@ -1244,7 +1213,11 @@
       // Check login status
       checkLoginStatus();
     });
+    
   </script>
+  <script src="../js/chatbot.js"></script>
+  
+
 </body>
 
 </html>

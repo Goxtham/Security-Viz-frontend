@@ -24,6 +24,18 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        
+        /* Add highlight animation for example section */
+        @keyframes highlight {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .highlight-section {
+            animation: highlight 2s ease-out;
+        }
+        
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -206,6 +218,13 @@
     <div class="container mx-auto px-4 py-8 max-w-6xl" style="padding-top: 80px;">
         <h1 class="text-3xl font-bold text-center mb-8 title-gradient">Blowfish Algorithm Visualization</h1>
         
+        <!-- Add Example Button -->
+        <div class="text-center mb-8">
+            <button onclick="scrollToExample()" class="btn btn-primary" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border: none; padding: 10px 25px; border-radius: 25px; font-weight: 500; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); color: white;">
+                <i class="fas fa-book-open me-2"></i>Go to Example
+            </button>
+        </div>
+        
         <!-- Input Section -->
         <div class="bg-white rounded-lg shadow-md mb-8 p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -379,6 +398,77 @@
                             <canvas id="visualizationCanvas" width="800" height="1200"></canvas>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Section -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl" id="example-section" style="scroll-margin-top: 100px;">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-6 title-gradient">Blowfish Algorithm Example</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-blue-50 p-4 rounded-md">
+                    <h3 class="text-lg font-semibold mb-3">Step 1: Key Generation</h3>
+                    <p class="mb-2">Let's use a simple key for demonstration:</p>
+                    <div class="bg-white p-3 rounded">
+                        <p class="font-medium">Key: "MySecretKey"</p>
+                        <p class="text-sm text-gray-600 mt-1">This key is used to initialize the P-array and S-boxes.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-md">
+                    <h3 class="text-lg font-semibold mb-3">Step 2: Message Processing</h3>
+                    <p class="mb-2">Let's encrypt the message "Hello":</p>
+                    <div class="bg-white p-3 rounded">
+                        <p class="font-medium">Original Message: "Hello"</p>
+                        <p class="text-sm text-gray-600 mt-1">Binary representation:</p>
+                        <div class="font-mono text-xs bg-gray-100 p-2 mt-1 rounded">
+                            H (01001000) e (01100101) l (01101100) l (01101100) o (01101111)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-md">
+                    <h3 class="text-lg font-semibold mb-3">Step 3: Encryption Process</h3>
+                    <p class="mb-2">The message is processed through 16 rounds of the Feistel network:</p>
+                    <div class="bg-white p-3 rounded">
+                        <p class="font-medium">For each 64-bit block:</p>
+                        <ol class="list-decimal list-inside text-sm mt-2 space-y-1">
+                            <li>Split into Left (32 bits) and Right (32 bits) halves</li>
+                            <li>For each round (16 times):
+                                <ul class="list-disc list-inside ml-4 mt-1">
+                                    <li>Left = Left XOR P[i]</li>
+                                    <li>Right = Right XOR F(Left)</li>
+                                    <li>Swap Left and Right</li>
+                                </ul>
+                            </li>
+                            <li>Final swap and XOR with P[16] and P[17]</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-md">
+                    <h3 class="text-lg font-semibold mb-3">Step 4: Final Result</h3>
+                    <div class="bg-white p-3 rounded">
+                        <p class="font-medium">Encrypted Message (Base64):</p>
+                        <div class="font-mono text-sm bg-gray-100 p-2 mt-1 rounded break-all">
+                            dGhpcyBpcyBhbiBleGFtcGxlIGVuY3J5cHRlZCBtZXNzYWdl
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">When decrypted with the same key, it returns: "Hello"</p>
+                    </div>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-md">
+                    <h3 class="text-lg font-semibold mb-3">Try It Yourself</h3>
+                    <p class="mb-2">Use the visualization tool above to encrypt and decrypt your own messages:</p>
+                    <ol class="list-decimal list-inside text-sm mt-2 space-y-1">
+                        <li>Enter your message in the "Input Message" field</li>
+                        <li>Enter a key (4-56 characters) or click the random button</li>
+                        <li>Click "Encrypt" to see the encryption process</li>
+                        <li>Copy the encrypted result and click "Decrypt" to see the decryption process</li>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -928,5 +1018,8 @@
             });
         }
     </script>
+    
+    <!-- Add the Blowfish JavaScript file -->
+    <script src="blowfish.js"></script>
 </body>
 </html> 

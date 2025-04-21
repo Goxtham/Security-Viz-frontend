@@ -225,14 +225,9 @@ function aes_init() {
     return;
   }
 
-  // const plain_text = "Two One Nine Two";
-  // const ikey = "Thats my Kung Fu";
-
   let input = get4x4matrix(plain_text); //input matrix
   let key = get4x4matrix(ikey); //key matrix
-
-  //ADD ROUND KEY - 0
-  let state_arr = addRoundKey(input, key);
+  let state_arr = input; // Keep track of current state
 
   const stepsBox = document.querySelector("#results-container");
   stepsBox.innerHTML = '';
@@ -247,12 +242,17 @@ function aes_init() {
   stepsBox.appendChild(createTable(getHexTable(key)));
   stepsBox.innerHTML += "<br>";
 
+  //ADD ROUND KEY - 0
+  state_arr = addRoundKey(input, key);
+
   stepsBox.innerHTML += "Add round key:";
   stepsBox.appendChild(createTable(getHexTable(state_arr)));
   stepsBox.innerHTML += "<br>";
+  
+  // Add explanation for initial AddRoundKey with actual values
+  stepsBox.innerHTML += createTransformationExplanation("addRoundKey", 0, input, key, state_arr);
 
   const TOTAL_ROUNDS = 10;
-
   round = 1;
 
   while(round <= TOTAL_ROUNDS) {
@@ -260,25 +260,37 @@ function aes_init() {
     stepsBox.innerHTML += "<h2> ROUND : "+round+"</h2> <br>";
 
     //SUBSTITUTION BYTES
+    let beforeSubBytes = [...state_arr];
     state_arr = substituteBytes(state_arr);
 
     stepsBox.innerHTML += "Substitution bytes:";
     stepsBox.appendChild(createTable(getHexTable(state_arr)));
     stepsBox.innerHTML += "<br>";
+    
+    // Add explanation for SubBytes with actual values
+    stepsBox.innerHTML += createTransformationExplanation("subBytes", round, beforeSubBytes, null, state_arr);
 
     //SHIFT ROWS
+    let beforeShiftRows = [...state_arr];
     state_arr = shiftRows(state_arr);
 
     stepsBox.innerHTML += "Shift rows:";
     stepsBox.appendChild(createTable(getHexTable(state_arr)));
     stepsBox.innerHTML += "<br>";
+    
+    // Add explanation for ShiftRows with actual values
+    stepsBox.innerHTML += createTransformationExplanation("shiftRows", round, beforeShiftRows, null, state_arr);
 
     //MIX COLUMNS
     if(round != 10) {
+      let beforeMixColumns = [...state_arr];
       state_arr = mixColumns(state_arr);
       stepsBox.innerHTML += "Mix columns:";
       stepsBox.appendChild(createTable(getHexTable(state_arr)));
       stepsBox.innerHTML += "<br>";
+      
+      // Add explanation for MixColumns with actual values
+      stepsBox.innerHTML += createTransformationExplanation("mixColumns", round, beforeMixColumns, null, state_arr);
     }
 
     //GENERATING NEW KEY
@@ -288,20 +300,162 @@ function aes_init() {
     stepsBox.innerHTML += "<br>";
 
     //ADD ROUND KEY
+    let beforeAddRoundKey = [...state_arr];
     state_arr = addRoundKey(state_arr, key);
     stepsBox.innerHTML += "Add round key:";
     stepsBox.appendChild(createTable(getHexTable(state_arr)));
     stepsBox.innerHTML += "<br>";
+    
+    // Add explanation for AddRoundKey with actual values
+    stepsBox.innerHTML += createTransformationExplanation("addRoundKey", round, beforeAddRoundKey, key, state_arr);
 
     round++;
   }
-
 
   const resultBox = document.querySelector("#resultbox");
   resultBox.innerHTML = 'Final result: <br><br>';
   resultBox.appendChild(createTable(getHexTable(state_arr)));
 }
 
+// Function to create detailed explanations for each transformation
+function createTransformationExplanation(transformation, round, beforeState, key, afterState) {
+  let explanation = '';
+  
+  switch(transformation) {
+    case "subBytes":
+      // Find first non-zero byte that changed for the example
+      let exampleByte = '';
+      let exampleResult = '';
+      let exampleRow = '';
+      let exampleCol = '';
+      
+      for(let i = 0; i < 4; i++) {
+        for(let j = 0; j < 4; j++) {
+          const beforeHex = parseInt(beforeState[j][i], 2).toString(16).toUpperCase().padStart(2, '0');
+          const afterHex = parseInt(afterState[j][i], 2).toString(16).toUpperCase().padStart(2, '0');
+          if(beforeHex !== afterHex) {
+            exampleByte = beforeHex;
+            exampleResult = afterHex;
+            exampleRow = beforeHex[0];
+            exampleCol = beforeHex[1];
+            break;
+          }
+        }
+        if(exampleByte) break;
+      }
+
+      explanation = `
+        <div class="transformation-explanation bg-white p-4 rounded-lg shadow-md mt-4 mb-4">
+          <h3 class="text-lg font-bold mb-2">SubBytes Transformation (Round ${round})</h3>
+          <div class="space-y-2">
+            <p class="text-gray-700">Each byte in the state matrix is replaced using the S-box lookup table:</p>
+            <div class="bg-gray-50 p-3 rounded">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="mb-2">Before SubBytes:</p>
+                  ${createStateMatrix(beforeState)}
+                  <p class="mt-2">After SubBytes:</p>
+                  ${createStateMatrix(afterState)}
+                </div>
+                <div class="bg-purple-50 p-2 rounded">
+                  <p class="font-medium mb-2">Example using your input:</p>
+                  <div class="space-y-2">
+                    <p>Input byte: ${exampleByte}</p>
+                    <p>1. Split into row (${exampleRow}) and column (${exampleCol})</p>
+                    <p>2. Look up in S-box table</p>
+                    <p>3. Output: ${exampleResult}</p>
+                    <p class="font-mono mt-2">${exampleByte} → ${exampleResult}</p>
+                    <p class="text-sm">(Row ${exampleRow}, Column ${exampleCol} in S-box)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case "shiftRows":
+      explanation = `
+        <div class="transformation-explanation bg-white p-4 rounded-lg shadow-md mt-4 mb-4">
+          <h3 class="text-lg font-bold mb-2">ShiftRows Transformation (Round ${round})</h3>
+          <div class="space-y-2">
+            <p class="text-gray-700">Each row is shifted cyclically to the left by a different number of positions:</p>
+            <div class="bg-gray-50 p-3 rounded">
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <p class="mb-2">Before ShiftRows:</p>
+                  ${createStateMatrix(beforeState)}
+                  <p class="mt-2">After ShiftRows:</p>
+                  ${createStateMatrix(afterState)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case "mixColumns":
+      explanation = `
+        <div class="transformation-explanation bg-white p-4 rounded-lg shadow-md mt-4 mb-4">
+          <h3 class="text-lg font-bold mb-2">MixColumns Transformation (Round ${round})</h3>
+          <div class="space-y-2">
+            <p class="text-gray-700">Each column is transformed using matrix multiplication in GF(2⁸):</p>
+            <div class="bg-gray-50 p-3 rounded">
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <p class="mb-2">Before MixColumns:</p>
+                  ${createStateMatrix(beforeState)}
+                  <p class="mt-2">After MixColumns:</p>
+                  ${createStateMatrix(afterState)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case "addRoundKey":
+      explanation = `
+        <div class="transformation-explanation bg-white p-4 rounded-lg shadow-md mt-4 mb-4">
+          <h3 class="text-lg font-bold mb-2">AddRoundKey Transformation (Round ${round})</h3>
+          <div class="space-y-2">
+            <p class="text-gray-700">Each byte of the state is combined with a byte of the round key using XOR:</p>
+            <div class="bg-gray-50 p-3 rounded">
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <p class="mb-2">Before AddRoundKey:</p>
+                  ${createStateMatrix(beforeState)}
+                  <p class="mt-2">Round Key:</p>
+                  ${createStateMatrix(key)}
+                  <p class="mt-2">After AddRoundKey:</p>
+                  ${createStateMatrix(afterState)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+  }
+  
+  return explanation;
+}
+
+// Helper function to create a visual representation of the state matrix
+function createStateMatrix(state) {
+  let html = '<div class="grid grid-cols-4 gap-1 font-mono text-sm">';
+  for(let i = 0; i < 4; i++) {
+    for(let j = 0; j < 4; j++) {
+      const hex = parseInt(state[j][i], 2).toString(16).toUpperCase().padStart(2, '0');
+      html += `<div class="bg-gray-100 p-1 text-center">${hex}</div>`;
+    }
+  }
+  html += '</div>';
+  return html;
+}
 
 //rotates left with 1 unit
 function rotateLeftOneUnit(l){
@@ -405,4 +559,180 @@ function createTable(tableData) {
   table.appendChild(tableBody);
 
   return table;
+}
+
+// Function to get cookie value by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+// Check login status when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    let sessionId = getCookie('session_id');
+    const userInfo = document.getElementById('userInfo');
+    
+    if (!sessionId) {
+        userInfo.innerHTML = `
+            <a href="../login.html">
+                <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+            </a>
+        `;
+        return;
+    }
+    
+    try {
+        const response = await fetch('https://security-viz-api.onrender.com/check-session', {
+            method: 'GET',
+            headers: {
+                'X-Session-ID': sessionId,
+                'Accept': 'application/json'
+            },
+            credentials: 'include'
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.authenticated) {
+            userInfo.innerHTML = `
+                <span class="welcome-text">Welcome, ${data.username}</span>
+                <button class="sign-in-btn" onclick="logout()" title="Sign out">Logout</button>
+            `;
+        } else {
+            document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+            userInfo.innerHTML = `
+                <a href="../login.html">
+                    <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+                </a>
+            `;
+        }
+    } catch (error) {
+        userInfo.innerHTML = `
+            <a href="../login.html">
+                <button class="sign-in-btn" title="Sign in to your account">Sign In</button>
+            </a>
+        `;
+    }
+});
+
+async function logout() {
+    const sessionId = getCookie('session_id');
+    if (!sessionId) {
+        window.location.href = '../login.html';
+        return;
+    }
+
+    try {
+        const response = await fetch('https://security-viz-api.onrender.com/logout', {
+            method: 'POST',
+            headers: {
+                'X-Session-ID': sessionId,
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        window.location.reload();
+    } catch (error) {
+        console.error('Logout failed:', error);
+        document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+        window.location.reload();
+    }
+}
+
+// Leaderboard Modal Functions
+function showOverallLeaderboard() {
+    document.getElementById('leaderboardModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    fetchOverallLeaderboard();
+}
+
+function closeOverallLeaderboard() {
+    document.getElementById('leaderboardModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    if (event.target == document.getElementById('leaderboardModal')) {
+        closeOverallLeaderboard();
+    }
+}
+
+async function fetchOverallLeaderboard() {
+    const sessionId = getCookie('session_id');
+    try {
+        const response = await fetch('https://security-viz-api.onrender.com/get-overall-leaderboard', {
+            method: 'GET',
+            headers: {
+                'X-Session-ID': sessionId,
+                'Accept': 'application/json'
+            },
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch leaderboard');
+        }
+        
+        const data = await response.json();
+        if (data.leaderboard && Array.isArray(data.leaderboard)) {
+            updateOverallLeaderboard(data.leaderboard);
+        } else {
+            throw new Error('Invalid leaderboard data');
+        }
+    } catch (error) {
+        console.error('Error fetching overall leaderboard:', error);
+        const tbody = document.getElementById('leaderboardTable').querySelector('tbody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center; color: #ff4444;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Failed to load leaderboard. Please try again later.</p>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function updateOverallLeaderboard(leaderboardData) {
+    const tbody = document.getElementById('leaderboardTable').querySelector('tbody');
+    tbody.innerHTML = '';
+
+    if (leaderboardData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No scores available yet. Complete some quizzes to appear on the leaderboard!</p>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    leaderboardData.forEach((user, index) => {
+        const row = document.createElement('tr');
+        const rank = index + 1;
+        let rankDisplay = rank.toString();
+        
+        if (rank === 1) rankDisplay = '🥇 1';
+        else if (rank === 2) rankDisplay = '🥈 2';
+        else if (rank === 3) rankDisplay = '🥉 3';
+        
+        row.innerHTML = `
+            <td>${rankDisplay}</td>
+            <td>${user.username}</td>
+            <td>${user.averageScore.toFixed(2)}%</td>
+            <td>${user.algorithmsCompleted}/6</td>
+        `;
+        
+        if (index < 3) {
+            row.classList.add(`medal-${index + 1}`);
+        }
+        
+        tbody.appendChild(row);
+    });
 }

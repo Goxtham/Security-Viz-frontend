@@ -377,6 +377,14 @@
     </div>
 
     <h1 class="text-center mt-4 mb-4 title-gradient" style="padding-top: 80px;">RSA Algorithm Visualization</h1>
+    
+    <!-- Add Example Button -->
+    <div class="text-center mb-4">
+        <button onclick="scrollToExample()" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); border: none; padding: 10px 25px; border-radius: 25px; font-weight: 500; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+            <i class="fas fa-book-open me-2"></i>Go to Example
+        </button>
+    </div>
+
     <div class="container">
         <h4 id="rsa-nav">RSA</h4>
         <div class="p-q-container">
@@ -571,9 +579,59 @@
     </div>
     <div style="margin-top:50px;"></div>
     <hr />
+    <!-- RSA Example Section -->
+    <div class="container mt-5" id="example-section">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title title-gradient">How RSA Works: A Practical Example</h4>
+                <div class="mt-4">
+                    <h5>Step 1: Key Generation</h5>
+                    <p>Let's use small numbers for demonstration:</p>
+                    <ul>
+                        <li>Choose two prime numbers: p = 61 and q = 53</li>
+                        <li>Calculate n = p × q = 61 × 53 = 3233</li>
+                        <li>Calculate φ(n) = (p-1) × (q-1) = 60 × 52 = 3120</li>
+                        <li>Choose e = 17 (must be coprime with φ(n))</li>
+                        <li>Calculate d = 2753 (modular multiplicative inverse of e mod φ(n))</li>
+                    </ul>
+                    <p>Public key: (n=3233, e=17)</p>
+                    <p>Private key: (n=3233, d=2753)</p>
+
+                    <h5 class="mt-4">Step 2: Encryption</h5>
+                    <p>Let's encrypt the message "HI":</p>
+                    <ul>
+                        <li>Convert "HI" to numbers: H=8, I=9</li>
+                        <li>Encryption formula: c = m^e mod n</li>
+                        <li>For H: 8^17 mod 3233 = 3146</li>
+                        <li>For I: 9^17 mod 3233 = 1486</li>
+                    </ul>
+                    <p>Encrypted message: 3146 1486</p>
+
+                    <h5 class="mt-4">Step 3: Decryption</h5>
+                    <p>To decrypt the message:</p>
+                    <ul>
+                        <li>Decryption formula: m = c^d mod n</li>
+                        <li>For 3146: 3146^2753 mod 3233 = 8 (H)</li>
+                        <li>For 1486: 1486^2753 mod 3233 = 9 (I)</li>
+                    </ul>
+                    <p>Decrypted message: "HI"</p>
+
+                    <div class="alert alert-info mt-4">
+                        <strong>Note:</strong> This is a simplified example using small numbers. In real-world applications, RSA uses much larger prime numbers (typically 2048 bits or more) to ensure security.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <script>
+    // Add smooth scroll function
+    function scrollToExample() {
+        const exampleSection = document.getElementById('example-section');
+        exampleSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
     $(document).ready(function () {
         function gcd(a, b) {
             if (b == 0)
